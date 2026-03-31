@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyCast | Premium Weather Tracker</title>
+    <!-- Modern Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --accent: #00f2fe;
+            --secondary: #4facfe;
+            --text: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('weather_bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        header {
+            margin: 40px 0;
+            text-align: center;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 600;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease;
+        }
+
+        /* Glassmorphism Sidebar */
+        .sidebar {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            height: fit-content;
+        }
+
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .search-box h3 {
+            font-weight: 400;
+            color: var(--text-dim);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 15px;
+            color: white;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+        }
+
+        button.search-btn {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: #0f172a;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        button.search-btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .history-section h3 {
+            font-weight: 400;
+            color: var(--text-dim);
+            margin-bottom: 15px;
+        }
+
+        #Search-history {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .history-item:hover {
+            background: var(--glass);
+            border-color: var(--accent);
+        }
+
+        /* Main Weather Content */
+        .main-display {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .weather-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .weather-info {
+            animation: scaleIn 0.5s ease;
+            width: 100%;
+        }
+
+        .city-name {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .temp-display {
+            font-size: 5rem;
+            font-weight: 300;
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .temp-display span {
+            font-size: 2rem;
+            margin-top: 15px;
+            color: var(--accent);
+        }
+
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .detail-label {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            text-align: center;
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 850px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            header h1 { font-size: 2.2rem; }
+            .city-name { font-size: 1.8rem; }
+            .temp-display { font-size: 3.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>SkyCast</h1>
+        <p>Premium Real-Time Weather Intelligence</p>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="search-box">
+                <h3>Location Search</h3>
+                <form id="weather-form">
+                    <div class="input-wrapper">
+                        <input type="text" id="city-input" placeholder="Enter city name..." autocomplete="off">
+                        <button type="submit" class="search-btn">Search</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="history-section">
+                <h3>Recent Cities</h3>
+                <div id="Search-history">
+                    <!-- History items will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Display -->
+        <div class="main-display">
+            <div id="error-box" class="error-msg"></div>
+            
+            <div id="weather-card" class="weather-card">
+                <div id="loading-spinner" class="spinner"></div>
+                <div id="weather-content" class="weather-info">
+                    <p style="color: var(--text-dim); font-size: 1.2rem;">Search for a city to see the magic happen.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("weather-form");
+        const cityInput = document.getElementById("city-input");
+        const weatherCard = document.getElementById("weather-card");
+        const weatherContent = document.getElementById("weather-content");
+        const spinner = document.getElementById("loading-spinner");
+        const errorBox = document.getElementById("error-box");
+        const historyDiv = document.getElementById("Search-history");
+
+        const API_KEY = "1a761d3bb408836cd1af3641ce1604c9";
+
+        let history = JSON.parse(localStorage.getItem('weather_history')) || [];
+
+        function showLoading(isLoading) {
+            spinner.style.display = isLoading ? "block" : "none";
+            weatherContent.style.visibility = isLoading ? "hidden" : "visible";
+            weatherContent.style.opacity = isLoading ? "0" : "1";
+        }
+
+        function showError(message) {
+            errorBox.textContent = message;
+            errorBox.style.display = "block";
+            setTimeout(() => {
+                errorBox.style.display = "none";
+            }, 3000);
+        }
+
+        async function fetchWeather(city) {
+            showLoading(true);
+            errorBox.style.display = "none";
+
+            try {
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
+                
+                if (!response.ok) {
+                    throw new Error("City not found.");
+                }
+
+                const data = await response.json();
+                displayWeather(data);
+                addToHistory(data.name, data);
+            } catch (error) {
+                showError(error.message);
+                weatherContent.innerHTML = `<p style="color: var(--text-dim);">No data available.</p>`;
+                weatherContent.style.visibility = "visible";
+                weatherContent.style.opacity = "1";
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function displayWeather(data) {
+            weatherContent.innerHTML = `
+                <div class="city-name">${data.name}, ${data.sys.country}</div>
+                <div style="color: var(--text-dim); text-transform: capitalize;">${data.weather[0].description}</div>
+                <div class="temp-display">${Math.round(data.main.temp)}<span>°C</span></div>
+                
+                <div class="weather-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Feels Like</div>
+                        <div class="detail-value">${Math.round(data.main.feels_like)}°C</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Humidity</div>
+                        <div class="detail-value">${data.main.humidity}%</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Wind Speed</div>
+                        <div class="detail-value">${data.wind.speed} m/s</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addToHistory(name, data) {
+            if (history.some(item => item.name.toLowerCase() === name.toLowerCase())) {
+                return;
+            }
+
+            history.unshift({ name, data });
+            if (history.length > 5) history.pop();
+
+            localStorage.setItem('weather_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            historyDiv.innerHTML = "";
+            history.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "history-item";
+                div.textContent = item.name;
+                div.onclick = () => displayWeather(item.data);
+                historyDiv.appendChild(div);
+            });
+        }
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const city = cityInput.value.trim();
+            if (city) {
+                fetchWeather(city);
+                cityInput.value = "";
+            }
+        });
+
+        // Initial render
+        renderHistory();
+        if (history.length > 0) {
+            displayWeather(history[0].data);
+        }
+    </script>
+</body>
+</html>

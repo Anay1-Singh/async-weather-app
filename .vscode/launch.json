@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch via File (Always Works)",
+            "file": "${workspaceFolder}/weather.html"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch via Local Server (8080)",
+            "url": "http://localhost:8080/weather.html",
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}

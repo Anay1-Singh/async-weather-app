@@ -5,13 +5,13 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch via File (Always Works)",
-            "file": "${workspaceFolder}/weather.html"
+            "file": "${workspaceFolder}/index.html"
         },
         {
             "type": "chrome",
             "request": "launch",
             "name": "Launch via Local Server (8080)",
-            "url": "http://localhost:8080/weather.html",
+            "url": "http://localhost:8080/index.html",
             "webRoot": "${workspaceFolder}"
         }
     ]

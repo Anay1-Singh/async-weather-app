@@ -1,8 +1,8 @@
-# ☁️ SkyCast | Premium Async Weather Tracker
+# SkyCast | Premium Async Weather Tracker
 
 SkyCast is a high-end, modern weather tracking application built for speed and aesthetics. It uses the OpenWeatherMap API to provide real-time weather intelligence with a stunning, minimal user interface.
 
-## ✨ Features
+## Features
 
 *   **Glassmorphic UI**: A beautiful, translucent design with modern CSS gradients and frosted effects.
 *   **Real-Time Data**: Fast, asynchronous weather fetching for any city worldwide.
@@ -10,7 +10,7 @@ SkyCast is a high-end, modern weather tracking application built for speed and a
 *   **Responsive**: Designed to look great on desktops, tablets, and phones.
 *   **Wait-Free Experience**: Smooth loading states and transitions for a premium feel.
 
-## 🚀 Getting Started
+## Getting Started
 
 Since SkyCast is built with vanilla HTML/JS, you can run it instantly without any complex setup.
 
@@ -25,7 +25,7 @@ python -m http.server 8080
 ```
 Then visit: `http://localhost:8080/weather.html`
 
-## 🛠️ Built With
+## Built With
 
 *   [OpenWeatherMap API](https://openweathermap.org/)
 *   Vanilla JavaScript (Async/Await)
